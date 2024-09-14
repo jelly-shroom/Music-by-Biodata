@@ -1,16 +1,19 @@
 using UnityEngine;
-using UnityEngine.XR;
 
 public class MovementTracker : MonoBehaviour
 {
-    [System.Obsolete]
     public Vector3 TrackMovement()
     {
-        // Example: Getting the position of the right hand controller
-        Vector3 rightHandPosition = InputTracking.GetLocalPosition(XRNode.RightHand);
-        Vector3 leftHandPosition = InputTracking.GetLocalPosition(XRNode.LeftHand);
+        Debug.Log("MovementTracker: Tracking movement");
 
-        // Implement logic to use position data as needed
-        return rightHandPosition; // Or return a combination of data as needed
+        // Simulated movement data for testing
+        Vector3 movementData = new Vector3(
+            Random.Range(-1f, 1f),
+            Random.Range(-1f, 1f),
+            Random.Range(-1f, 1f)
+        );
+
+        Debug.Log($"MovementTracker: Movement data: {movementData}");
+        return movementData;
     }
 }

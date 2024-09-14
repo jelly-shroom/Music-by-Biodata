@@ -1,17 +1,28 @@
 using UnityEngine;
-using System.Net.Http;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 public class BioDataManager : MonoBehaviour
 {
-    private static readonly HttpClient client = new HttpClient();
+    private readonly HttpClient client = new HttpClient();
+    private const string TERRA_API_ENDPOINT = "https://api.tryterra.co/v2/"; // Replace with actual Terra API endpoint
 
     public async Task<string> FetchBioData()
     {
-        var response = await client.GetAsync("https://api.terra.bio/v1/userdata");
-        response.EnsureSuccessStatusCode();
+        Debug.Log("BioDataManager: Fetching bio data");
 
-        var json = await response.Content.ReadAsStringAsync();
-        return json; // Parse biodata as necessary
+        try
+        {
+            var response = await client.GetAsync(TERRA_API_ENDPOINT + "heartRate");
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+            Debug.Log($"BioDataManager: Received bio data: {responseString}");
+            return responseString;
+        }
+        catch (HttpRequestException e)
+        {
+            Debug.LogError($"BioDataManager: Error fetching bio data: {e.Message}");
+            return null;
+        }
     }
 }

@@ -1,28 +1,39 @@
 using UnityEngine;
-using System.Net.Http;
 using System.Threading.Tasks;
+using System.Net.Http;
 using Newtonsoft.Json;
 using System.Text;
 
 public class SunoIntegration : MonoBehaviour
 {
-    private static readonly HttpClient client = new HttpClient();
+    private readonly HttpClient client = new HttpClient();
+    private const string SUNO_API_ENDPOINT = "https://api.suno.ai/v1/generate"; // Replace with actual Suno API endpoint
 
-    public async Task<string> GenerateAudio(string moodPrompt)
+    public async Task<string> GenerateAudio(string userInput)
     {
+        Debug.Log($"SunoIntegration: Generating audio for input: {userInput}");
+
         var request = new
         {
-            prompt = moodPrompt,
+            prompt = userInput,
             // Add other parameters as required by Suno API
         };
 
-        // Option 1: Using the extension method
-        var response = await client.PostAsJsonAsync("https://api.suno.ai/v1/generate", request);
+        var jsonContent = JsonConvert.SerializeObject(request);
+        var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
-
-        response.EnsureSuccessStatusCode();
-
-        var json = await response.Content.ReadAsStringAsync();
-        return json; // Parse audio URL or content as necessary
+        try
+        {
+            var response = await client.PostAsync(SUNO_API_ENDPOINT, content);
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+            Debug.Log($"SunoIntegration: Received response from Suno: {responseString}");
+            return responseString; // This should be the audio track URL or content
+        }
+        catch (HttpRequestException e)
+        {
+            Debug.LogError($"SunoIntegration: Error in Suno request: {e.Message}");
+            return null;
+        }
     }
 }

@@ -1,35 +1,51 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using System.Threading.Tasks;
 
 public class MainControl : MonoBehaviour
 {
-    private SpeechInputManager speechInputManager;
-    private ChatGPTIntegration chatGPT;
-    // private SunoIntegration sunoIntegration;
+    public TMP_InputField userInputField;
+    public Button submitButton;
+
+    private SunoIntegration sunoIntegration;
     private BioDataManager bioDataManager;
     private MovementTracker movementTracker;
     private AudioVisualGenerator audioVisualGenerator;
 
-    [System.Obsolete]
-    private async void Start()
+    private void Start()
     {
-        speechInputManager = GetComponent<SpeechInputManager>();
-        chatGPT = GetComponent<ChatGPTIntegration>();
-        // sunoIntegration = GetComponent<SunoIntegration>();
+        Debug.Log("MainController: Initializing components");
+        sunoIntegration = GetComponent<SunoIntegration>();
         bioDataManager = GetComponent<BioDataManager>();
         movementTracker = GetComponent<MovementTracker>();
         audioVisualGenerator = GetComponent<AudioVisualGenerator>();
 
-        speechInputManager.OnSpeechRecognized += ProcessSpeechInput;
+        submitButton.onClick.AddListener(OnSubmitButtonClick);
+        Debug.Log("MainController: Components initialized and button listener set");
     }
 
-    [System.Obsolete]
-    private async void ProcessSpeechInput(string userInput)
+    private void OnSubmitButtonClick()
     {
-        string moodPrompt = await chatGPT.GenerateMoodPrompt(userInput);
-        // string audioTrack = await sunoIntegration.GenerateAudio(moodPrompt);
-        string bioData = await bioDataManager.FetchBioData();
-        Vector3 movementData = movementTracker.TrackMovement();
+        string userInput = userInputField.text;
+        Debug.Log($"MainController: User input received: {userInput}");
+        ProcessUserInput(userInput);
+    }
 
-        audioVisualGenerator.GenerateAudioVisual(bioData, movementData);
+    private async void ProcessUserInput(string userInput)
+    {
+        Debug.Log("MainController: Processing user input");
+
+        string audioTrack = await sunoIntegration.GenerateAudio(userInput);
+        Debug.Log($"MainController: Audio track generated: {audioTrack}");
+
+        string bioData = await bioDataManager.FetchBioData();
+        Debug.Log($"MainController: Bio data fetched: {bioData}");
+
+        Vector3 movementData = movementTracker.TrackMovement();
+        Debug.Log($"MainController: Movement data tracked: {movementData}");
+
+        audioVisualGenerator.GenerateAudioVisual(audioTrack, bioData, movementData);
+        Debug.Log("MainController: Audio-visual generation complete");
     }
 }
