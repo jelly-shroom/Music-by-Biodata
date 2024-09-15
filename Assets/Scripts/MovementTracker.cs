@@ -23,6 +23,7 @@ public class MovementTracker : MonoBehaviour
     private float maxPitch = 7.0f; // Maximum pitch for the sound
     private float handHeightScale = 4.0f; // Scale to adjust the pitch effect
     private int frameCounter = 0;
+    public HeartRateDataReader heartRateDataReader; // Reference to HeartRateDataReader
     private int HR; // Heart rate
 
     void Start()
@@ -32,6 +33,7 @@ public class MovementTracker : MonoBehaviour
         PlayAmbientSound();
 
         HR = 68;
+        heartRateDataReader = GameObject.FindObjectOfType<HeartRateDataReader>();
         previousHeadPosition = Camera.main.transform.position; // Initialize previous head position
     }
 
@@ -67,7 +69,12 @@ public class MovementTracker : MonoBehaviour
         // Adjust pitch based on hand heights (average between left and right hand)
         float averageHandHeight = (leftHandPosition.y + rightHandPosition.y) / 2.0f;
         float normalizedHeight = Mathf.Clamp01((averageHandHeight + handHeightScale) / handHeightScale); // Normalize height
-        pitchSource.volume = Mathf.Lerp(minPitch, maxPitch, normalizedHeight); // Adjust pitch of the pitch-based sound
+
+            // Set volume instead of pitch
+        float targetVolume = Mathf.Lerp(0.05f, 0.4f, normalizedHeight); // Adjust volume between a minimum of 0.1 and maximum of 0.5
+        pitchSource.volume = targetVolume;
+
+        pitchSource.pitch= Mathf.Lerp(minPitch, maxPitch, normalizedHeight); // Adjust pitch of the pitch-based sound
 
         // Control melody playback speed based on head movement speed
         float movementSpeed = (currentHeadPosition - previousHeadPosition).magnitude / Time.deltaTime;
@@ -106,7 +113,7 @@ public class MovementTracker : MonoBehaviour
     {
         // Set pitch-modulated sound as the clip for looping background music
         pitchSource.clip = pitchClip;
-        pitchSource.volume = 0.3f;
+        //pitchSource.volume = 0.2f;
         pitchSource.loop = true;
         pitchSource.Play();
     }
