@@ -1,4 +1,0 @@
-repository "Music by Biodata@jlsheng@cloud"
-  path "/"
-    br "/main"
-    co "/main"
