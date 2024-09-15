@@ -26,6 +26,8 @@ public class MovementTracker : MonoBehaviour
     public HeartRateDataReader heartRateDataReader; // Reference to HeartRateDataReader
     private int HR; // Heart rate
 
+    public GameObject heart;
+
     void Start()
     {
         // Start playing the ambient sound as looping background music
@@ -82,6 +84,13 @@ public class MovementTracker : MonoBehaviour
 
         // Store the current head position for the next frame
         previousHeadPosition = currentHeadPosition;
+
+    //Make heart object go up and down like the actual heart rate number
+    // Make heart object go up and down like the actual heart rate number
+    float heartBeatMovement = Mathf.Sin(Time.time * HR / 60.0f) * 0.1f; // Sin wave based on HR, scaling movement to 0.1f
+    Vector3 heartPosition = heart.transform.position;
+    heartPosition.y = baseRoomScale + heartBeatMovement; // Adjust y position with heartbeat
+    heart.transform.position = heartPosition;
 
         if (frameCounter >= HR * 2)
         {
