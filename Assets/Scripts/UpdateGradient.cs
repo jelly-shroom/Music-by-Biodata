@@ -9,12 +9,13 @@ public class UpdateGradient : MonoBehaviour
     public float gradientValue2 = 5.0f; // Gradient value 2
     public float speedY = 0.005f; // Speed for Y
 
-    public HeartRateDataReader heartRateDataReader; // Reference to HeartRateDataReader
+    [SerializeField] HeartRateDataReader heartRateDataReader; // Reference to HeartRateDataReader
 
     void Start()
     {
         // Set the material from the GameObject's Renderer
         material = this.gameObject.GetComponent<Renderer>().material;
+        heartRateDataReader = GameObject.FindObjectOfType<HeartRateDataReader>(); // Find the HeartRateDataReader in the scene
     }
 
     void Update()
