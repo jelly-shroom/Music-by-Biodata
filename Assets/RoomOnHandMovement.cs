@@ -39,17 +39,17 @@ public class RoomOnHandMovement : MonoBehaviour
         float verticalRHandMovement = rightHandPosition.y - previousRHand.y;
 
         // Move roof up if hands are moving up and above head position
-        if ((verticalLHandMovement > 0 && leftHandPosition.y >= currentHeadPosition.y) ||
+        if ((verticalLHandMovement > 0 && leftHandPosition.y >= currentHeadPosition.y) &&
             (verticalRHandMovement > 0 && rightHandPosition.y >= currentHeadPosition.y) 
-            && (roof.transform.position.y <= currentHeadPosition.y + 3)) 
+            && (roof.transform.position.y <= currentHeadPosition.y + 13)) 
         {
             Vector3 newPosition = roof.transform.position;
             newPosition.y += 0.1f; // Adjust the increment value as needed
             roof.transform.position = newPosition;
         }
         // Move roof down if hands are moving down and roof is at least 2 units above head
-        else if ((verticalLHandMovement < 0 && roof.transform.position.y >= currentHeadPosition.y + .5f) ||
-                 (verticalRHandMovement < 0 && roof.transform.position.y >= currentHeadPosition.y + .5f)) 
+        else if ((verticalLHandMovement < 0 && roof.transform.position.y >= -.5f) ||
+                 (verticalRHandMovement < 0 && roof.transform.position.y >= -.5f)) 
         {
             Vector3 newPosition = roof.transform.position;
             newPosition.y -= 0.1f; // Adjust the decrement value as needed
