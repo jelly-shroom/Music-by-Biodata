@@ -28,15 +28,20 @@ public class MovementTracker : MonoBehaviour
     void Start()
     {
         // Start playing the ambient sound as looping background music
+        PlayPitchSound();
         PlayAmbientSound();
-        //PlayPitchSound();
+
         HR = 68;
         previousHeadPosition = Camera.main.transform.position; // Initialize previous head position
     }
 
     void Update()
     {
-        if (frameCounter >= HR)
+        if (!ambientSource.isPlaying)
+        {
+            ambientSource.Play(); // Ensure ambient sound keeps playing
+        }
+        if (frameCounter >= HR * 3)
         {
             PlayDrumSound();
             frameCounter = 0;
@@ -52,9 +57,9 @@ public class MovementTracker : MonoBehaviour
         // Detect head bobbing (up and down movement) for drum sound
         float headVerticalMovement = currentHeadPosition.y - previousHeadPosition.y;
 
-        if (Mathf.Abs(headVerticalMovement) > headBobThreshold)
+        if (Mathf.Abs(headVerticalMovement) > headBobThreshold && frameCounter % 5 == 0) 
         {
-            PlayDrumSound();
+            PlayMelodySound();
         }
 
         // Adjust pitch based on hand heights (average between left and right hand)
@@ -76,7 +81,6 @@ public class MovementTracker : MonoBehaviour
     {
         // Play the drum sound when head bobbing is detected
         drumSource.PlayOneShot(drumClip);
-        
         // Apply room scaling like a heartbeat
         float heartbeatScale = baseRoomScale + Mathf.Sin(Time.time * Mathf.PI * HR / 60.0f) * heartbeatScaleFactor;
         room.transform.localScale = Vector3.one * heartbeatScale;
@@ -94,7 +98,8 @@ public class MovementTracker : MonoBehaviour
     {
         // Set pitch-modulated sound as the clip for looping background music
         pitchSource.clip = pitchClip;
-        pitchSource.loop = true;
+        pitchSource.volume = 0.2f;
+        pitchSource.loop = false;
         pitchSource.Play();
     }
 
