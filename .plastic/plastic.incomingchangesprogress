@@ -1,0 +1,52 @@
+[
+  {
+    "MountId": "56e62dd7-241f-41e9-8c6b-dd4ca4513e62",
+    "AncestorCsetIds": [
+      1
+    ],
+    "SourceCsetId": 3,
+    "DestinationCsetId": 1,
+    "FileConflicts": [
+      {
+        "Path": "/Packages/manifest.json",
+        "ItemId": 136,
+        "ParentItemId": 132,
+        "BaseRevId": 102,
+        "SourceRevId": 316,
+        "DestinationRevId": 102
+      },
+      {
+        "Path": "/Packages/packages-lock.json",
+        "ItemId": 137,
+        "ParentItemId": 132,
+        "BaseRevId": 103,
+        "SourceRevId": 317,
+        "DestinationRevId": 103
+      },
+      {
+        "Path": "/ProjectSettings/EditorBuildSettings.asset",
+        "ItemId": 141,
+        "ParentItemId": 134,
+        "BaseRevId": 107,
+        "SourceRevId": 318,
+        "DestinationRevId": 107
+      },
+      {
+        "Path": "/ProjectSettings/ProjectSettings.asset",
+        "ItemId": 149,
+        "ParentItemId": 134,
+        "BaseRevId": 115,
+        "SourceRevId": 319,
+        "DestinationRevId": 115
+      },
+      {
+        "Path": "/ProjectSettings/ShaderGraphSettings.asset",
+        "ItemId": 151,
+        "ParentItemId": 134,
+        "BaseRevId": 117,
+        "SourceRevId": 320,
+        "DestinationRevId": 117
+      }
+    ]
+  }
+]
