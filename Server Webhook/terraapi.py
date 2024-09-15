@@ -67,8 +67,10 @@ def consume_terra_webhook() -> flask.Response:
     # body_str = str(request.get_data(), 'utf-8')
     body = request.get_json()
     if body["type"] == "body":
-        with open("../data.json", "w") as f:
-            json.dump(body["data"][0]["heart_data"]["heart_rate_data"]["detailed"]["hr_samples"], f, indent=2)
+        with open("../Assets/Resources/data.json", "w") as f:
+            data = body["data"][0]["heart_data"]["heart_rate_data"]["detailed"]["hr_samples"]
+            data = {"heart_rate": data}
+            json.dump(data, f, indent=2)
     _LOGGER.info(
         "Received webhook for user %s of type %s",
         body.get("user", {}).get("user_id"),
