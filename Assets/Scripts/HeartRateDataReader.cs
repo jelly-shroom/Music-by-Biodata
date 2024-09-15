@@ -33,7 +33,6 @@ public class HeartRateDataReader : MonoBehaviour
         string data = textAsset.text.ToString();
         // fileDataHandler = new FileDataHandler(dataDirPath, dataFileName);
         // string data = fileDataHandler.Load();
-        Debug.Log("Data: " + data);
         List<int> bpmList = ExtractBpmFromJson(data);
         int currbpm = bpmList[bpmList.Count - 1];
         // Do something with bpmList
