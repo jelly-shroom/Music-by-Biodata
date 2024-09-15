@@ -13,21 +13,35 @@ public class MovementTracker : MonoBehaviour
     public AudioClip melodyClip; // Audio clip for melody or another musical layer
     public AudioClip ambClip; // Audio clip for ambient background sound
 
+    public GameObject room; // The room to scale
+    public float heartbeatScaleFactor = 0.1f; // How much the room should scale with each heartbeat
+    public float baseRoomScale = 1.0f; // The base scale of the room
+
     private Vector3 previousHeadPosition;
-    private float headBobThreshold = 0.001f; // Sensitivity for detecting head bobbing
+    private float headBobThreshold = 0.005f; // Sensitivity for detecting head bobbing
     private float minPitch = 0.1f; // Minimum pitch for the sound
     private float maxPitch = 5.0f; // Maximum pitch for the sound
     private float handHeightScale = 4.0f; // Scale to adjust the pitch effect
+    private int frameCounter = 0;
+    private int HR; // Heart rate
 
     void Start()
     {
         // Start playing the ambient sound as looping background music
         PlayAmbientSound();
+        //PlayPitchSound();
+        HR = 68;
         previousHeadPosition = Camera.main.transform.position; // Initialize previous head position
     }
 
     void Update()
     {
+        if (frameCounter >= HR)
+        {
+            PlayDrumSound();
+            frameCounter = 0;
+        }
+
         // Get head position
         Vector3 currentHeadPosition = Camera.main.transform.position;
 
@@ -54,12 +68,18 @@ public class MovementTracker : MonoBehaviour
 
         // Store the current head position for the next frame
         previousHeadPosition = currentHeadPosition;
+
+        frameCounter++;
     }
 
     private void PlayDrumSound()
     {
         // Play the drum sound when head bobbing is detected
         drumSource.PlayOneShot(drumClip);
+        
+        // Apply room scaling like a heartbeat
+        float heartbeatScale = baseRoomScale + Mathf.Sin(Time.time * Mathf.PI * HR / 60.0f) * heartbeatScaleFactor;
+        room.transform.localScale = Vector3.one * heartbeatScale;
     }
 
     private void PlayAmbientSound()
@@ -68,6 +88,14 @@ public class MovementTracker : MonoBehaviour
         ambientSource.clip = ambClip;
         ambientSource.loop = true;
         ambientSource.Play();
+    }
+
+    private void PlayPitchSound()
+    {
+        // Set pitch-modulated sound as the clip for looping background music
+        pitchSource.clip = pitchClip;
+        pitchSource.loop = true;
+        pitchSource.Play();
     }
 
     private void PlayMelodySound()
