@@ -4,6 +4,7 @@ from flask import request
 from terra.base_client import Terra
 import os
 import dotenv
+import json
 
 dotenv.load_dotenv()
 
@@ -65,13 +66,14 @@ def get_connections():
 def consume_terra_webhook() -> flask.Response:
     # body_str = str(request.get_data(), 'utf-8')
     body = request.get_json()
+    if body["type"] == "body":
+        with open("../data.json", "w") as f:
+            json.dump(body["data"][0]["heart_data"]["heart_rate_data"]["detailed"]["hr_samples"], f, indent=2)
     _LOGGER.info(
         "Received webhook for user %s of type %s",
         body.get("user", {}).get("user_id"),
         body["type"])
     verified = terra.check_terra_signature(request.get_data().decode("utf-8"), request.headers['terra-signature'])
-    print(request.get_data().decode("utf-8"))
-    print(request.headers['terra-signature'])
     if verified:
       return flask.Response(status=200)
     else:
