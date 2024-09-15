@@ -10,7 +10,7 @@ public class SunoAIGenerator : MonoBehaviour
     private const string AUTH_TOKEN = "rlMNMVLqqyU1UiNkUsLRyGKbDCshsJe5"; // Replace with your actual token
 
     [SerializeField] private string prompt = "";
-    [SerializeField] private string gptDescriptionPrompt = "a pop song about HackMIT";
+    [SerializeField] private string gptDescriptionPrompt = "a pop song in piano";
     [SerializeField] private string modelVersion = "chirp-v3-5";
 
     void Start()
